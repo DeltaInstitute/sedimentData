@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sand Mgmt Data</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+		<link rel="stylesheet" type="text/css" href="css/own_style.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="js/leaflet-hash.js"></script>
+		<script src="js/Autolinker.min.js"></script>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="data/exp_leisuremarinapoly.js"></script>
+		<script src="data/exp_RegionalAsset.js"></script>
+		<script src="data/exp_CERCLISSite.js"></script>
+		<script src="data/exp_DecommissionedPlant.js"></script>
+		<script src="data/exp_naturalbeachpoint.js"></script>
+		<script src="data/exp_otherharborsandmarinas.js"></script>
+		<script src="data/exp_parksincoastalzone.js"></script>
+		<script>
+		var map = L.map('map', {
+			zoomControl:true, maxZoom:19
+		}).fitBounds([[41.9798308885,-88.2003065729],[42.5060688179,-87.1649202537]]);
+		var hash = new L.Hash(map);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">qgis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+		var feature_group = new L.featureGroup([]);
+		var raster_group = new L.LayerGroup([]);
+		var basemap_0 = L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', { 
+			attribution: additional_attrib + 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
+		});	
+		basemap_0.addTo(map);	
+		var layerOrder=new Array();
+		function pop_parksincoastalzone(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">NAME</th><td>' + Autolinker.link(String(feature.properties['NAME'])) + '</td></tr><tr><th scope="row">FEATTYPE</th><td>' + Autolinker.link(String(feature.properties['FEATTYPE'])) + '</td></tr><tr><th scope="row">MNFC</th><td>' + Autolinker.link(String(feature.properties['MNFC'])) + '</td></tr><tr><th scope="row">SQMI</th><td>' + Autolinker.link(String(feature.properties['SQMI'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		function doStyleparksincoastalzone(feature) {
+				return {
+					color: '#000000',
+					fillColor: '#b2df8a',
+					weight: 0.5,
+					dashArray: '',
+					opacity: 1.0,
+					fillOpacity: 1.0
+				};
+
+		}
+		var exp_parksincoastalzoneJSON = new L.geoJson(exp_parksincoastalzone,{
+			onEachFeature: pop_parksincoastalzone,
+			style: doStyleparksincoastalzone
+		});
+		layerOrder[layerOrder.length] = exp_parksincoastalzoneJSON;
+		for (index = 0; index < layerOrder.length; index++) {
+			feature_group.removeLayer(layerOrder[index]);feature_group.addLayer(layerOrder[index]);
+		}
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_parksincoastalzoneJSON);
+		function pop_otherharborsandmarinas(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">id</th><td>' + Autolinker.link(String(feature.properties['id'])) + '</td></tr><tr><th scope="row">type</th><td>' + Autolinker.link(String(feature.properties['type'])) + '</td></tr><tr><th scope="row">Name</th><td>' + Autolinker.link(String(feature.properties['Name'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_otherharborsandmarinasJSON = new L.geoJson(exp_otherharborsandmarinas,{
+			onEachFeature: pop_otherharborsandmarinas,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 6.0,
+					fillColor: '#78b18b',
+					color: '#000000',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_otherharborsandmarinasJSON);
+		function pop_naturalbeachpoint(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">full_id</th><td>' + Autolinker.link(String(feature.properties['full_id'])) + '</td></tr><tr><th scope="row">osm_id</th><td>' + Autolinker.link(String(feature.properties['osm_id'])) + '</td></tr><tr><th scope="row">osm_type</th><td>' + Autolinker.link(String(feature.properties['osm_type'])) + '</td></tr><tr><th scope="row">natural</th><td>' + Autolinker.link(String(feature.properties['natural'])) + '</td></tr><tr><th scope="row">name</th><td>' + Autolinker.link(String(feature.properties['name'])) + '</td></tr><tr><th scope="row">supervised</th><td>' + Autolinker.link(String(feature.properties['supervised'])) + '</td></tr><tr><th scope="row">website</th><td>' + Autolinker.link(String(feature.properties['website'])) + '</td></tr><tr><th scope="row">surface</th><td>' + Autolinker.link(String(feature.properties['surface'])) + '</td></tr><tr><th scope="row">sport</th><td>' + Autolinker.link(String(feature.properties['sport'])) + '</td></tr><tr><th scope="row">leisure</th><td>' + Autolinker.link(String(feature.properties['leisure'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_naturalbeachpointJSON = new L.geoJson(exp_naturalbeachpoint,{
+			onEachFeature: pop_naturalbeachpoint,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 6.0,
+					fillColor: '#fdbf6f',
+					color: '#000000',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_naturalbeachpointJSON);
+		function pop_DecommissionedPlant(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">id</th><td>' + Autolinker.link(String(feature.properties['id'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_DecommissionedPlantJSON = new L.geoJson(exp_DecommissionedPlant,{
+			onEachFeature: pop_DecommissionedPlant,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 6.0,
+					fillColor: '#ff7f00',
+					color: '#000000',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_DecommissionedPlantJSON);
+		function pop_CERCLISSite(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">Facility</th><td>' + Autolinker.link(String(feature.properties['Facility'])) + '</td></tr><tr><th scope="row">Street_A</th><td>' + Autolinker.link(String(feature.properties['Street_A'])) + '</td></tr><tr><th scope="row">City_Nam</th><td>' + Autolinker.link(String(feature.properties['City_Nam'])) + '</td></tr><tr><th scope="row">County</th><td>' + Autolinker.link(String(feature.properties['County'])) + '</td></tr><tr><th scope="row">State</th><td>' + Autolinker.link(String(feature.properties['State'])) + '</td></tr><tr><th scope="row">ZIP</th><td>' + Autolinker.link(String(feature.properties['ZIP'])) + '</td></tr><tr><th scope="row">SITE_SMS</th><td>' + Autolinker.link(String(feature.properties['SITE_SMS'])) + '</td></tr><tr><th scope="row">FEDERAL</th><td>' + Autolinker.link(String(feature.properties['FEDERAL'])) + '</td></tr><tr><th scope="row">NPL_STAT</th><td>' + Autolinker.link(String(feature.properties['NPL_STAT'])) + '</td></tr><tr><th scope="row">Detail_R</th><td>' + Autolinker.link(String(feature.properties['Detail_R'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_CERCLISSiteJSON = new L.geoJson(exp_CERCLISSite,{
+			onEachFeature: pop_CERCLISSite,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 6.0,
+					fillColor: '#ff7f00',
+					color: '#000000',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_CERCLISSiteJSON);
+		function pop_RegionalAsset(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">id</th><td>' + Autolinker.link(String(feature.properties['id'])) + '</td></tr><tr><th scope="row">name</th><td>' + Autolinker.link(String(feature.properties['name'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_RegionalAssetJSON = new L.geoJson(exp_RegionalAsset,{
+			onEachFeature: pop_RegionalAsset,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 8.4,
+					fillColor: '#fde73c',
+					color: '#000000',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_RegionalAssetJSON);
+		function pop_leisuremarinapoly(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">full_id</th><td>' + Autolinker.link(String(feature.properties['full_id'])) + '</td></tr><tr><th scope="row">osm_id</th><td>' + Autolinker.link(String(feature.properties['osm_id'])) + '</td></tr><tr><th scope="row">osm_type</th><td>' + Autolinker.link(String(feature.properties['osm_type'])) + '</td></tr><tr><th scope="row">natural</th><td>' + Autolinker.link(String(feature.properties['natural'])) + '</td></tr><tr><th scope="row">gnis_count</th><td>' + Autolinker.link(String(feature.properties['gnis_count'])) + '</td></tr><tr><th scope="row">gnis_featu</th><td>' + Autolinker.link(String(feature.properties['gnis_featu'])) + '</td></tr><tr><th scope="row">harbor</th><td>' + Autolinker.link(String(feature.properties['harbor'])) + '</td></tr><tr><th scope="row">addr_state</th><td>' + Autolinker.link(String(feature.properties['addr_state'])) + '</td></tr><tr><th scope="row">ele</th><td>' + Autolinker.link(String(feature.properties['ele'])) + '</td></tr><tr><th scope="row">leisure</th><td>' + Autolinker.link(String(feature.properties['leisure'])) + '</td></tr><tr><th scope="row">gnis_creat</th><td>' + Autolinker.link(String(feature.properties['gnis_creat'])) + '</td></tr><tr><th scope="row">gnis_fea_1</th><td>' + Autolinker.link(String(feature.properties['gnis_fea_1'])) + '</td></tr><tr><th scope="row">landuse</th><td>' + Autolinker.link(String(feature.properties['landuse'])) + '</td></tr><tr><th scope="row">waterway</th><td>' + Autolinker.link(String(feature.properties['waterway'])) + '</td></tr><tr><th scope="row">name</th><td>' + Autolinker.link(String(feature.properties['name'])) + '</td></tr><tr><th scope="row">operator</th><td>' + Autolinker.link(String(feature.properties['operator'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		function doStyleleisuremarinapoly(feature) {
+				return {
+					color: '#000000',
+					fillColor: '#b21d68',
+					weight: 1.3,
+					dashArray: '',
+					opacity: 1.0,
+					fillOpacity: 1.0
+				};
+
+		}
+		var exp_leisuremarinapolyJSON = new L.geoJson(exp_leisuremarinapoly,{
+			onEachFeature: pop_leisuremarinapoly,
+			style: doStyleleisuremarinapoly
+		});
+		layerOrder[layerOrder.length] = exp_leisuremarinapolyJSON;
+		for (index = 0; index < layerOrder.length; index++) {
+			feature_group.removeLayer(layerOrder[index]);feature_group.addLayer(layerOrder[index]);
+		}
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_leisuremarinapolyJSON);
+
+		feature_group.addTo(map);
+	var baseMaps = {
+		'MapQuestOpen Aerial': basemap_0
+	};
+		L.control.layers(baseMaps,{"leisuremarinapoly": exp_leisuremarinapolyJSON,"RegionalAsset": exp_RegionalAssetJSON,"CERCLISSite": exp_CERCLISSiteJSON,"DecommissionedPlant": exp_DecommissionedPlantJSON,"naturalbeachpoint": exp_naturalbeachpointJSON,"otherharborsandmarinas": exp_otherharborsandmarinasJSON,"parksincoastalzone": exp_parksincoastalzoneJSON},{collapsed:false}).addTo(map);
+		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
+	</script>
+</body>
+</html>
